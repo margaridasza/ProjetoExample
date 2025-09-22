@@ -38,4 +38,16 @@ app.MapGet("/produtos",()=>{ //referenciar para qual objeto a gente vai usar, ro
     }
     return produtos;
     });
+
+app.MapDelete("/produtos/{id}", (int id) => 
+{
+    using var conn = new MySqlConnection(connStr);
+    conn.Open();
+    var cmd = new MySqlCommand("DELETE FROM tb_produtos WHERE id = @id", conn);
+    cmd.Parameters.AddWithValue("@id", id);
+    cmd.ExecuteNonQuery();//Quando faz read retorna colunas com valor (reader) com parâmetro, neste caso não tem retorno (update, delete, create)
+    conn.Close();
+    return Results.Ok();
+});
+
 app.Run();
