@@ -50,4 +50,46 @@ app.MapDelete("/produtos/{id}", (int id) =>
     return Results.Ok();
 });
 
+app.MapPost("/produtos", async (
+    HttpRequest req) =>
+{
+    var form = await req.ReadFormAsync();
+    string nome = form["nome"];
+    decimal preco = decimal.Parse(form["preco"]);
+    string categoria = form["categoria"];
+    //Pega os dados do form para (depois) preparar os dados do formulário para a string de insert
+    using var conn = new MySqlConnection(connStr);//instancia 
+    conn.Open();
+    var cmd = new MySqlCommand("INSERT INTO tb_produtos (nome, preco, categoria)" +
+        "values (@nome, @preco, @categoria", conn);
+    cmd.Parameters.AddWithValue("@nome", nome);
+    cmd.Parameters.AddWithValue("@preco", preco);  
+    cmd.Parameters.AddWithValue("@categoria", categoria);  
+    cmd.ExecuteNonQuery();
+    conn.Close();  
+    return Results.Redirect("/index.html");
+});
+
+app.MapPost("/produtos/{id}", async (int id,//na hora que clicar no botão editar, ele vai pegar o id do produto
+    HttpRequest req) =>
+{
+    var form = await req.ReadFormAsync();
+    string nome = form["nome"];
+    decimal preco = decimal.Parse(form["preco"]);
+    string categoria = form["categoria"];
+    //Pega os dados do form para (depois) preparar os dados do formulário para a string de insert
+    using var conn = new MySqlConnection(connStr);//Instancia
+    conn.Open();
+    var cmd = new MySqlCommand(
+        "UPDATE td_produtos SET nome=@nome, preco=@preco,"+
+        "categoria=@categoria WHERE id=@id", conn);
+    cmd.Parameters.AddWithValue("@nome", nome);
+    cmd.Parameters.AddWithValue("@preco", preco);
+    cmd.Parameters.AddWithValue("@categoria", categoria);
+    cmd.Parameters.AddWithValue("@id", id);
+    cmd.ExecuteNonQuery();//Quando faz read retorna colunas com valor (reader) com parâmetro, neste caso não tem retorno (update, delete, create)
+    conn.Close();
+    return Results.Redirect("/index.html");
+});
+
 app.Run();
