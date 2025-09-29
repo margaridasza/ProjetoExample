@@ -19,5 +19,31 @@
         </thead>
         <tbody id="produtos"></tbody>
     </table>
+
+    <script>
+        fetch('/produtos')// acessa leitura do produto
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('produtos');
+                data.forEach(p => {// Lê os valores dentro do list
+                    tbody.innerHTML += `
+                    <tr> 
+                            <td>${p.id}</td>
+                            <td>${p.nome}</td>
+                            <td>${p.preco}</td>
+                            <td>${p.categoria}</td>
+                            <td> 
+                            <a href="/edit.html?id=${p.id}>Editar</a>
+                            <a href="/delete.html?id=${p.id}>Excluir</a>
+                            </td>
+                    <tr>`; // Crase usa pra fazer interpolação
+                });
+            });
+        function excluir(id) {
+            fetch(`/produtos/${id}`, { method: 'DELETE' })
+                .then(()=> location.reload());
+        }
+
+    </script>
 </body>
 </html>
