@@ -22,26 +22,27 @@
 
     <script>
         fetch('/produtos')// acessa leitura do produto
-            .then(res => res.json())
-            .then(data => {
-                const tbody = document.getElementById('produtos');
+            .then(res => res.json())//converte para json
+            .then(data => {//pega os dados
+                const tbody = document.getElementById('produtos');//pega o corpo da tabela
                 data.forEach(p => {// Lê os valores dentro do list
+                    //para cada produto (p) dentro do data, ele cria uma linha na tabela
                     tbody.innerHTML += `
-                    <tr> 
-                            <td>${p.id}</td>
-                            <td>${p.nome}</td>
-                            <td>${p.preco}</td>
-                            <td>${p.categoria}</td>
-                            <td> 
-                            <a href="/edit.html?id=${p.id}>Editar</a>
-                            <a href="/delete.html?id=${p.id}>Excluir</a>
-                            </td>
-                    <tr>`; // Crase usa pra fazer interpolação
+                                                                <tr>
+                                                                        <td>${p.id}</td>
+                                                                        <td>${p.nome}</td>
+                                                                        <td>${p.preco}</td>
+                                                                        <td>${p.categoria}</td>
+                                                                        <td>
+                                                                        <a href="/edit.html?id=${p.id}">Editar</a>
+                                                                        <a href="" onclick="excluir(${p.id})">Excluir</a>
+                                                                        </td>
+                                                                <tr>`; // Crase usa pra fazer interpolação
                 });
             });
         function excluir(id) {
-            fetch(`/produtos/${id}`, { method: 'DELETE' })
-                .then(()=> location.reload());
+            fetch(`/produtos/${id}`, { method: 'DELETE' })// chama o delete, passando o id, e o método, que é delete
+                .then(() => location.reload());// recarrega a página
         }
 
     </script>
