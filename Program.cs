@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);//criação e configuração do bui
 var app = builder.Build();//criação do app, configuração do app
 //app.MapGet("/", () => "Hello World!");
 //rota
-string connStr = "Server = localhost; Database = bd_loja; User = root"; // Password = admin;
+string connStr = "Server = localhost; Database = bd_lojaExemple; User = root"; // Password = admin;
 // connStr String de conexão
 
 // Direcionar rota da view (páginas estáticas) e colocar ações do CRUD
@@ -83,7 +83,7 @@ app.MapPost("/produtos/{id}", async (int id,// ATUALIZAÇÃO - na hora que clicar 
     using var conn = new MySqlConnection(connStr);//Instancia
     conn.Open();
     var cmd = new MySqlCommand(
-        "UPDATE td_produtos SET nome=@nome, preco=@preco,"+
+        "UPDATE tb_produtos SET nome=@nome, preco=@preco," +
         "categoria=@categoria WHERE id=@id", conn);
     cmd.Parameters.AddWithValue("@nome", nome);
     cmd.Parameters.AddWithValue("@preco", preco);
